@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <math.h>
+
+double calculate_method1(int n, long long *op_count) {
+    *op_count = 0;
+    if (n < 2) {
+        return 1.0;
+    }
+
+    double P = 1.0;
+    (*op_count)++;
+
+    for (int i = 2; i <= n; i++) {
+        (*op_count)++;
+
+        double pow2 = 1.0;
+        (*op_count)++;
+
+        for (int j = 0; j < i; j++) {
+            (*op_count)++;
+            pow2 *= 2.0;
+            (*op_count) += 2;
+        }
+        (*op_count)++;
+
+        double denom = pow2 - 2.0;
+        (*op_count) += 2;
+
+        double term = 1.0 + (1.0 / denom);
+        (*op_count) += 3;
+
+        P *= term;
+        (*op_count) += 2;
+
+        (*op_count)++;
+    }
+    (*op_count)++;
+
+    return P;
+}
+
+int main() {
+    int test_values[] = {2, 5, 10, 20, 50};
+    int num_tests = sizeof(test_values) / sizeof(test_values[0]);
+
+    for (int k = 0; k < num_tests; k++) {
+        int n = test_values[k];
+        long long ops = 0;
+        double result = calculate_method1(n, &ops);
+
+        printf("n = %-3d | Result = %.7f | Operations = %lld\n", n, result, ops);
+    }
+
+    return 0;
+}
